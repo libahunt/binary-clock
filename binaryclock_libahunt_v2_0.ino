@@ -63,7 +63,7 @@ int colCounter = 0;
 int colValue = 0;
 int interruptCounter = 0;
 int updateCounter = 0;
-int updateIntervalSec = 3;//5*60; //Controller counts time this long on it's own and then updates from RTC
+int updateIntervalSec = 5*60; //Controller counts time this long on it's own and then updates from RTC
 
 
 volatile boolean interrupt = false; //helper to do actual computing in loop() instead of interrupt routine
@@ -176,7 +176,6 @@ void loop() {
     }
 
     if (updateCounter >= updateIntervalSec) {
-      DPL("Time to update.");
       getTimeFromDS1302();
       updateCounter = 0;
     }
@@ -291,13 +290,6 @@ void setTimeInDS1302() {
 void getTimeFromDS1302() {
   // Read all clock data at once (burst mode).
   DS1302_clock_burst_read( (uint8_t *) &rtc);
-  DP("RTC read: ");
-  DP(rtc.h24.Hour10);
-  DP(rtc.h24.Hour);
-  DP(rtc.Minutes10);
-  DP(rtc.Minutes);
-  DP(rtc.Seconds10);
-  DPL(rtc.Seconds);
   t.setBCD(rtc.h24.Hour10, rtc.h24.Hour, rtc.Minutes10, rtc.Minutes,rtc.Seconds10, rtc.Seconds);
 }
 
